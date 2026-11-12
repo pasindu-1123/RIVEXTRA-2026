@@ -16,6 +16,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.8,
     },
-    // ඔයාට තවත් පේජ් තියෙනවා නම් මෙතනට add කරන්න...
+    // ඔයාට තවත් පේජ් තියෙනවා නම් මෙතනට add කරන්න
   ];
 }
