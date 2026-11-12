@@ -152,29 +152,44 @@ export default function CardUI({ student }) {
           ref={cardRef}
           className="print-card card-shine relative w-full overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#0a1120] shadow-[0_30px_80px_-20px_rgba(37,99,235,0.5)]"
         >
-          {/* Header: school logo + RIVEXTRA logo (white band so both logos are clear) */}
-          <div className="relative bg-white px-6 py-5">
-            <div className="flex items-center justify-center gap-5 sm:gap-6">
-              <img
-                src="/assets/school-logo.png"
-                alt="School Logo"
-                className="h-14 w-auto object-contain sm:h-16"
-                crossOrigin="anonymous"
-              />
-              <div className="h-12 w-px bg-[#0a1b4d]/25 sm:h-14" />
-              <img
-                src="/assets/rev-logo.png"
-                alt="RIVEXTRA '26"
-                className="h-9 w-auto max-w-[60%] object-contain sm:h-14"
-                crossOrigin="anonymous"
-              />
-              <img
-                src="/assets/rivextra-logo.png"
-                alt="RIVEXTRA '26"
-                className="h-5 w-auto max-w-[20%] object-contain sm:h-25"
-                crossOrigin="anonymous"
-              />
+          {/* Header: school logo | faculty logo | RIVEXTRA wordmark */}
+          <div className="relative bg-white px-4 py-5 sm:px-8 sm:py-6">
+            <div className="mx-auto flex max-w-full items-center justify-center gap-3 sm:gap-6">
+              {/* School logo */}
+              <div className="flex h-14 shrink-0 items-center justify-center sm:h-20">
+                <img
+                  src="/assets/school-logo.png"
+                  alt="School Logo"
+                  className="h-full w-auto object-contain"
+                  crossOrigin="anonymous"
+                />
+              </div>
+
+              <div className="h-10 w-px shrink-0 bg-[#0a1b4d]/20 sm:h-14" />
+
+              {/* Technological Faculty logo */}
+              <div className="flex h-14 shrink-0 items-center justify-center sm:h-20">
+                <img
+                  src="/assets/rev-logo.png"
+                  alt="Technological Faculty"
+                  className="h-full w-auto object-contain"
+                  crossOrigin="anonymous"
+                />
+              </div>
+
+              <div className="h-10 w-px shrink-0 bg-[#0a1b4d]/20 sm:h-14" />
+
+              {/* RIVEXTRA wordmark (wide logo, so sized by width) */}
+              <div className="flex h-14 min-w-0 items-center justify-center sm:h-20">
+                <img
+                  src="/assets/rivextra-logo.png"
+                  alt="RIVEXTRA '26"
+                  className="w-24 object-contain sm:w-36"
+                  crossOrigin="anonymous"
+                />
+              </div>
             </div>
+
             <div className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-blue-700 via-cyan-400 to-blue-700" />
           </div>
 
