@@ -10,7 +10,7 @@ export async function POST(req) {
       return NextResponse.json({ error: "Student ID is required" }, { status: 400 });
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://rivextra-2026.vercel.app";
     const profileUrl = `${baseUrl}/card/${studentId}`;
 
     const qrCodeDataUrl = await QRCode.toDataURL(profileUrl, {
