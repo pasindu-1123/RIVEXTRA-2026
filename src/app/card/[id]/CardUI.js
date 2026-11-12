@@ -184,7 +184,7 @@ export default function CardUI({ student }) {
                 <img
                   src="/assets/rivextra-logo.png"
                   alt="RIVEXTRA '26"
-                  className="w-24 object-contain sm:w-36"
+                  className="w-228 object-contain sm:w-40"
                   crossOrigin="anonymous"
                 />
               </div>
