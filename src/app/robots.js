@@ -6,7 +6,7 @@ export default function robots(): MetadataRoute.Robots {
 
   return {
     rules: {
-      userAgent: '*', // හැම search engine එකකටම අවසර
+      userAgent: '*', // හැම search engine එකකටම අවස
       allow: '/',
       disallow: [
         '/api/', // API routes search කරන්න එපාෑ
