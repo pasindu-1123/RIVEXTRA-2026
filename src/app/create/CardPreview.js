@@ -78,8 +78,8 @@ export default function CardPreview({
     : {};
 
   return (
-    <div className={isPrintOnly ? "w-[65mm] h-[95mm] m-0 p-0" : "flex w-full flex-col items-center gap-6 sm:gap-8"}>
-      <div ref={wrapRef} className={isPrintOnly ? "w-full h-full m-0 p-0 flex justify-center items-center" : "w-full max-w-[400px]"}>
+    <div className={isPrintOnly ? "w-[65mm] h-[95mm] m-0 p-0 flex items-center justify-center" : "flex w-full flex-col items-center gap-6 sm:gap-8"}>
+      <div ref={wrapRef} className={isPrintOnly ? "w-full h-full m-0 p-0" : "w-full max-w-[400px]"}>
         
         <div
           className={isPrintOnly ? "h-full w-full m-0 p-0" : "card-float animate-float-slow"}
