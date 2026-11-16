@@ -197,7 +197,7 @@ export default function CardPreview({
 
         <div className={`flex w-full items-center justify-center ${isPrintOnly ? "mt-1 gap-1" : "mt-3 gap-3"}`}>
                     <div className="h-px flex-1 bg-[#0a1b4d]/30" />
-                    <p className={`font-bold text-gray-800 ${isPrintOnly ? "text-[10px]" : "text-[15px]"}`}>
+                    <p className={`font-bold text-gray-800 ${isPrintOnly ? "text-[10px]" : "text-[19px]"}`}>
                       Grade: {details.grade || "—"}
                     </p>
                     <div className="h-px flex-1 bg-[#0a1b4d]/30" />
