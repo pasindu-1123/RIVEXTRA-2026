@@ -462,9 +462,18 @@ img {
 
 /* Print styles */
 @media print {
+  @page {
+    size: A4 portrait;
+    margin: 0 !important; /* පිටුවේ අද්දර ඉඩ අයින් කරන්න */
+  }
+  
   body {
     background: white !important;
     color: black !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
   
   /* Hide everything except the card */
@@ -477,17 +486,18 @@ img {
     visibility: visible;
   }
   
+  /* මේක තමයි වැදගත්ම වෙනස්කම - absolute අයින් කළා */
   .print-card {
-    position: absolute;
-    left: 0;
-    top: 0;
+    position: relative !important; /* absolute නිසා කාඩ් එක උඩට වැටෙන එක නවත්තනවා */
     width: 100%;
-    margin: 0;
-    padding: 0;
-    background: white !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
     color: black !important;
     box-shadow: none !important;
     border: none !important;
+    page-break-inside: avoid; /* කාඩ් එක පිටු දෙකකට කැපෙන්නේ නැති වෙන්න */
+    break-inside: avoid;
   }
 }
 
