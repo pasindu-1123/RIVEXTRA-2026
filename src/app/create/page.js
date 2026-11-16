@@ -344,7 +344,8 @@ export default function CreatePage() {
   const currentStep = isGenerated ? 2 : allFilled ? 1 : 0;
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#05080f] text-white">
+    <>
+    <main className="relative min-h-screen overflow-hidden bg-[#05080f] text-white print:hidden">
       {/* Background */}
       <div className="grid-bg pointer-events-none absolute inset-0" />
       <div className="pointer-events-none absolute -right-32 top-0 h-[360px] w-[360px] rounded-full bg-blue-600/20 blur-[130px] sm:h-[500px] sm:w-[500px] sm:blur-[150px]" />
@@ -717,32 +718,50 @@ export default function CreatePage() {
 
       <style jsx global>{`
         @media print {
-          body * {
-            visibility: hidden;
+          @page {
+            size: A4 portrait;
+            margin: 0;
           }
-          .print-card,
-          .print-card * {
-            visibility: visible;
-          }
-          /* float / scale animations print walata ain karanawa */
-          .card-float,
-          .card-scaler {
-            animation: none !important;
-            transform: none !important;
-          }
-          .print-card {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 400px !important;
+          html,
+          body {
             margin: 0;
             padding: 0;
-            background: white !important;
-            box-shadow: none !important;
-            border: none !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
           }
         }
       `}</style>
     </main>
+
+    {/* ===== A4 PRINT SHEET: screen eke penenne naha, Print karaddi witharai ===== */}
+    {isGenerated && generatedQr && (
+      <div
+        className="hidden bg-white print:block"
+        style={{
+          width: "210mm",
+          height: "297mm",
+          overflow: "hidden",
+          paddingTop: "10mm",
+        }}
+      >
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 65mm)",
+            justifyContent: "center",
+            gap: 0,
+          }}
+        >
+          <CardPreview
+            details={details}
+            generatedQr={generatedQr}
+            isGenerated={true}
+            isPrintOnly={true}
+            showActions={false}
+          />
+        </div>
+      </div>
+    )}
+    </>
   );
 }
