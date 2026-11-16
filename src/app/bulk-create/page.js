@@ -111,7 +111,6 @@ export default function BulkCreatePage() {
   if (showPrintView) {
     return (
       <main className="min-h-screen bg-gray-200 print:bg-white">
-        {/* Print කරද්දී මේක පේන්නේ නෑ */}
         <div className="w-full bg-white shadow-sm p-4 mb-8 flex justify-between items-center print:hidden">
           <button onClick={() => setShowPrintView(false)} className="text-gray-600 hover:text-black flex items-center gap-2 font-semibold px-4 py-2 rounded-lg hover:bg-gray-100 transition">
             <ArrowLeft className="h-5 w-5" /> Edit Students
@@ -121,19 +120,19 @@ export default function BulkCreatePage() {
           </button>
         </div>
 
-        {/* A4 Print Area */}
+        {/* A4 Print Area - මෙතන ප්‍රධාන වෙනස්කම් */}
         <div className="mx-auto bg-white shadow-2xl print:shadow-none" 
              style={{ width: '210mm', minHeight: '297mm' }}>
           
-          {/* මෙතන තමයි වෙනස. p-[5mm] දුන්නා අද්දරින් පොඩි ඉඩක් තියෙන්න, gap-0 දුන්නා කාඩ් අතරේ ඉඩ නැතුව තියෙන්න */}
+          {/* මෙතන p-[0mm] දුන්නා අද්දරින් ඉඩ නැතුව තියෙන්න, gap-0 දුන්නා කාඩ් අතරේ ඉඩ නැතුව තියෙන්න */}
           <div className="grid grid-cols-3 p-[0mm] gap-0">
             {addedStudents.map((student, idx) => (
-              <div key={idx} className="flex justify-center items-start w-full">
+              <div key={idx} className="flex justify-center items-start w-full m-0 p-0">
                 <CardPreview 
                   details={student} 
                   generatedQr={student.qrCode} 
                   isGenerated={true} 
-                  isPrintOnly={true} // 👈 මෙතන තමයි වැදගත්ම දේ
+                  isPrintOnly={true}
                   showActions={false}
                 />
               </div>
@@ -228,7 +227,9 @@ export default function BulkCreatePage() {
           <div>
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold">Added Students ({addedStudents.length})</h2>
-              {addedStudents.length >= 4 && (
+              
+              {/* 👇 මෙතන තමයි වෙනස්කම - දැන් එක සිසුවෙක් ආවම බටන් එක එනවා */}
+              {addedStudents.length > 0 && (
                 <button onClick={() => setShowPrintView(true)} className="primary-button px-6 py-2 rounded-lg font-bold flex items-center gap-2 text-sm animate-fade-in shadow-lg shadow-blue-500/20">
                   <Sparkles className="h-4 w-4"/> Generate A4 Sheet
                 </button>
@@ -263,7 +264,7 @@ export default function BulkCreatePage() {
         </div>
       </div>
 
-      {/* ප්‍රින්ට් කරද්දී කාඩ් එක හරියටම A4 එකට ගැලපෙන්න මේ CSS එක අවශ්‍යයි */}
+      {/* Print Styles */}
       <style jsx global>{`
         @media print {
           @page {
@@ -276,7 +277,6 @@ export default function BulkCreatePage() {
             -webkit-print-color-adjust: exact;
             print-color-adjust: exact;
           }
-          /* මේකෙන් ප්‍රින්ට් වෙද්දී හරියටම කාඩ් එක විතරක් පේන්න හදනවා */
           .print-card {
             page-break-inside: avoid;
             break-inside: avoid;
