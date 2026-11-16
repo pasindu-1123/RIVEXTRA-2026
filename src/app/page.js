@@ -320,9 +320,9 @@ export default function Home() {
               </p>
             </div>
 
-            <p className="mt-12 text-center text-[11px] text-gray-500 sm:mt-14 sm:text-xs">
-              Sample preview · the QR shown is for illustration only
-            </p>
+            // <p className="mt-12 text-center text-[11px] text-gray-500 sm:mt-14 sm:text-xs">
+            //   Sample preview · the QR shown is for illustration only
+            // </p>
           </div>
         </div>
       </section>
