@@ -167,7 +167,11 @@ export default function CardPreview({
       {/* QR */}
       <div className="relative z-10 flex flex-1 items-center justify-center">
         {isGenerated && generatedQr ? (
-          <div className="animate-fade-in rounded-xl bg-white p-1.5 shadow-[0_10px_30px_rgba(10,27,77,0.18)]">
+          <div
+            className={`rounded-xl bg-white p-1.5 shadow-[0_10px_30px_rgba(10,27,77,0.18)] ${
+              isPrintOnly ? "" : "animate-fade-in"
+            }`}
+          >
             <img
               src={generatedQr}
               alt="QR Code"
