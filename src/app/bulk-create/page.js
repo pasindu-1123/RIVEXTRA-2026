@@ -120,24 +120,28 @@ export default function BulkCreatePage() {
           </button>
         </div>
 
-        {/* A4 Print Area - මෙතන ප්‍රධාන වෙනස්කම් */}
+               {/* A4 Print Area */}
         <div className="mx-auto bg-white shadow-2xl print:shadow-none" 
              style={{ width: '210mm', minHeight: '297mm' }}>
           
-          {/* මෙතන p-[0mm] දුන්නා අද්දරින් ඉඩ නැතුව තියෙන්න, gap-0 දුන්නා කාඩ් අතරේ ඉඩ නැතුව තියෙන්න */}
-          <div className="grid grid-cols-3 p-[0mm] gap-0">
-  {addedStudents.map((student, idx) => (
-    <div key={idx} className="flex justify-center items-start w-[65mm] h-[95mm] m-0 p-0">
-      <CardPreview 
-        details={student} 
-        generatedQr={student.qrCode} 
-        isGenerated={true} 
-        isPrintOnly={true}
-        showActions={false}
-      />
-    </div>
-  ))}
-</div>
+          {/* මෙතන 'justify-items-center' දාලා තියෙනවා මැදට එන්න */}
+          <div className="grid grid-cols-3 p-0 m-0 gap-0 justify-items-center">
+            {addedStudents.map((student, idx) => (
+              <div key={idx} className="w-[65mm] h-[95mm] m-0 p-0">
+                <CardPreview 
+                  details={student} 
+                  generatedQr={student.qrCode} 
+                  isGenerated={true} 
+                  isPrintOnly={true}
+                  showActions={false}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+
+              
         </div>
       </main>
     );
