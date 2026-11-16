@@ -3,20 +3,21 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, UserPlus, Trash2, Printer, Loader2, Sparkles, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, UserPlus, Trash2, Printer, Loader2, Sparkles, CheckCircle2, AlertTriangle } from "lucide-react";
 import CardPreview from "../create/CardPreview";
 
 const initialDetails = {
-  name: "", grade: "", height: "", weight: "", school: "", birthday: "", age: "", bmi: "",
+  name: "", grade: "", height: "", weight: "", school: "", birthday: "", age: "", bmi: "", gender: "Male" // 👈 gender එක default විදියට දැම්මා
 };
 
 export default function BulkCreatePage() {
   const router = useRouter();
   const [details, setDetails] = useState(initialDetails);
   const [addedStudents, setAddedStudents] = useState([]); // Add කරපු සිසුන්
-  const [isGenerating, setIsGenerating] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false); // Add කරනකොට loading
+  const [isPrintReady, setIsPrintReady] = useState(false); // Final Generate එක
   const [errorMsg, setErrorMsg] = useState("");
-  const [showPrintView, setShowPrintView] = useState(false); // Print කරන scene එක පෙන්නන්න
+  const [showPrintView, setShowPrintView] = useState(false); 
 
   // Age Auto Calculate
   useEffect(() => {
@@ -52,8 +53,8 @@ export default function BulkCreatePage() {
     if (errorMsg) setErrorMsg("");
   }
 
-  // සිසුවෙක් එකතු කිරීම
-  const handleAddStudent = () => {
+  // සිසුවෙක් එකතු කිරීම (මෙතනදීම API දෙකටම කෝල් වෙනවා)
+  const handleAddStudent = async () => {
     if (!details.name) {
       setErrorMsg("කරුණාකර සිසුවාගේ නම ඇතුළත් කරන්න.");
       return;
@@ -67,61 +68,35 @@ export default function BulkCreatePage() {
       return;
     }
 
-    setAddedStudents([...addedStudents, { ...details }]);
-    setDetails(initialDetails); // ඊළඟ සිසුවාට ෆෝම් එක ක්ලියර් කරනවා
-    setErrorMsg("");
-  };
-
-  // සිසුවෙක් අයින් කිරීම
-  const handleRemoveStudent = (index) => {
-    setAddedStudents(addedStudents.filter((_, i) => i !== index));
-  };
-
-  // ඔක්කොම Generate කරලා Print View එකට යනවා
-  const handleGenerateAll = async () => {
-    if (addedStudents.length === 0) {
-      setErrorMsg("කරුණාකර එක් සිසුවෙකු හෝ එකතු කරන්න.");
-      return;
-    }
-    
     setIsGenerating(true);
     setErrorMsg("");
 
     try {
-      const generatedResults = [];
-      
-      for (const student of addedStudents) {
-        // 1. Save
-        const res = await fetch("/api/students", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            ...student,
-            height: Number(student.height), weight: Number(student.weight),
-            bmi: Number(student.bmi), age: Number(student.age),
-          }),
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "දත්ත සුරැකීමේ දෝෂයක්.");
+      // 1. Student Save කරන්න
+      const res = await fetch("/api/students", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...details,
+          height: Number(details.height), weight: Number(details.weight),
+          bmi: Number(details.bmi), age: Number(details.age),
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "දත්ත සුරැකීමේ දෝෂයක්.");
 
-        // 2. QR එක ගන්න
-        const qrRes = await fetch("/api/create-qr", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ studentId: data.student._id }),
-        });
-        const qrData = await qrRes.json();
-        if (!qrRes.ok) throw new Error(qrData.error || "QR සෑදීමේ දෝෂයක්.");
+      // 2. QR එක ගන්න
+      const qrRes = await fetch("/api/create-qr", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ studentId: data.student._id }),
+      });
+      const qrData = await qrRes.json();
+      if (!qrRes.ok) throw new Error(qrData.error || "QR සෑදීමේ දෝෂයක්.");
 
-        generatedResults.push({
-          ...student,
-          qrCode: qrData.qrCode
-        });
-      }
-
-      // Generate වුනාට පස්සේ, ඒක Print View එකට මාරු කරනවා
-      setAddedStudents(generatedResults);
-      setShowPrintView(true);
+      // 3. සාර්ථක නම් List එකට එකතු කරන්න
+      setAddedStudents([...addedStudents, { ...details, qrCode: qrData.qrCode }]);
+      setDetails(initialDetails); // ඊළඟ සිසුවාට ෆෝම් එක ක්ලියර් කරනවා
       
     } catch (error) {
       setErrorMsg(error.message);
@@ -130,25 +105,30 @@ export default function BulkCreatePage() {
     }
   };
 
+  // සිසුවෙක් අයින් කිරීම
+  const handleRemoveStudent = (index) => {
+    setAddedStudents(addedStudents.filter((_, i) => i !== index));
+  };
+
   const isAgeInvalid = parseInt(details.age) >= 20;
 
   // ================= PRINT VIEW (A4 Sheet) =================
   if (showPrintView) {
     return (
-      <main className="min-h-screen bg-gray-100 p-8">
+      <main className="min-h-screen bg-gray-100 p-4 md:p-8">
         <div className="max-w-[210mm] mx-auto mb-8 flex justify-between items-center print:hidden">
-          <button onClick={() => setShowPrintView(false)} className="text-gray-600 hover:text-black flex items-center gap-2">
+          <button onClick={() => setShowPrintView(false)} className="text-gray-600 hover:text-black flex items-center gap-2 font-semibold">
             <ArrowLeft className="h-5 w-5" /> Edit Students
           </button>
-          <button onClick={() => window.print()} className="bg-blue-600 text-white px-6 py-3 rounded-lg flex items-center gap-2 font-bold hover:bg-blue-700">
+          <button onClick={() => window.print()} className="bg-blue-600 text-white px-6 py-3 rounded-lg flex items-center gap-2 font-bold hover:bg-blue-700 shadow-lg">
             <Printer className="h-5 w-5" /> Print A4 Sheet
           </button>
         </div>
 
-        {/* A4 Print Area - 2 Columns (දෙපැත්තට) */}
-        <div className="mx-auto bg-white w-[210mm] min-h-[297mm] p-[15mm] grid grid-cols-2 gap-8 print:shadow-none shadow-xl print:w-full print:p-0">
+        {/* A4 Print Area - 3 Columns (එක පේළියකට 3ක්) */}
+        <div className="mx-auto bg-white w-[210mm] min-h-[297mm] p-[10mm] grid grid-cols-3 gap-x-2 gap-y-4 print:shadow-none shadow-2xl print:w-full print:p-0 print:gap-4">
           {addedStudents.map((student, idx) => (
-            <div key={idx} className="flex justify-center items-center">
+            <div key={idx} className="flex justify-center items-start">
               <CardPreview 
                 details={student} 
                 generatedQr={student.qrCode} 
@@ -180,7 +160,7 @@ export default function BulkCreatePage() {
 
         {errorMsg && (
           <div className="mb-6 bg-red-500/10 border border-red-500/30 text-red-400 p-4 rounded-xl text-sm flex items-center gap-2">
-            {errorMsg}
+            <AlertTriangle className="h-5 w-5" /> {errorMsg}
           </div>
         )}
 
@@ -207,6 +187,16 @@ export default function BulkCreatePage() {
                     <label className="text-xs text-gray-400 mb-1 block">Grade</label>
                     <input type="text" name="grade" value={details.grade} onChange={handleChange} className="w-full bg-[#05080f] border border-white/10 rounded-lg px-4 py-3 text-sm focus:border-blue-500 outline-none" placeholder="e.g. 10" />
                   </div>
+                  
+                  {/* 👇 Gender එක එකතු කළා (Database එකේ අවශ්‍ය නිසා) */}
+                  <div>
+                    <label className="text-xs text-gray-400 mb-1 block">Gender</label>
+                    <select name="gender" value={details.gender} onChange={handleChange} className="w-full bg-[#05080f] border border-white/10 rounded-lg px-4 py-3 text-sm focus:border-blue-500 outline-none text-white">
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                    </select>
+                  </div>
+
                   <div>
                     <label className="text-xs text-gray-400 mb-1 block">Birthday</label>
                     <input type="date" name="birthday" value={details.birthday} onChange={handleChange} className="w-full bg-[#05080f] border border-white/10 rounded-lg px-4 py-3 text-sm focus:border-blue-500 outline-none" style={{ colorScheme: "dark" }} />
@@ -229,8 +219,8 @@ export default function BulkCreatePage() {
                   </div>
                 )}
 
-                <button onClick={handleAddStudent} disabled={isAgeInvalid || !details.name} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed mt-2">
-                  Add to List ({addedStudents.length}/6)
+                <button onClick={handleAddStudent} disabled={isAgeInvalid || !details.name || isGenerating} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed mt-2 flex justify-center items-center gap-2">
+                  {isGenerating ? <><Loader2 className="h-5 w-5 animate-spin"/> Generating Card...</> : `Add to List (${addedStudents.length}/6)`}
                 </button>
               </div>
             </div>
@@ -240,10 +230,11 @@ export default function BulkCreatePage() {
           <div>
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold">Added Students ({addedStudents.length})</h2>
-              {addedStudents.length > 0 && (
-                <button onClick={handleGenerateAll} disabled={isGenerating} className="primary-button px-6 py-2 rounded-lg font-bold flex items-center gap-2 text-sm disabled:opacity-50">
-                  {isGenerating ? <Loader2 className="h-4 w-4 animate-spin"/> : <Sparkles className="h-4 w-4"/>}
-                  Generate A4 Sheet
+              
+              {/* 4 වෙනි සිසුවා ආවම මේ බටන් එක එනවා */}
+              {addedStudents.length >= 4 && (
+                <button onClick={() => setShowPrintView(true)} className="primary-button px-6 py-2 rounded-lg font-bold flex items-center gap-2 text-sm animate-fade-in shadow-lg shadow-blue-500/20">
+                  <Sparkles className="h-4 w-4"/> Generate A4 Sheet
                 </button>
               )}
             </div>
@@ -263,9 +254,9 @@ export default function BulkCreatePage() {
                       <Trash2 className="h-4 w-4" />
                     </button>
                     
-                    {/* Live Preview (අර අපේ CardPreview එකම තමයි) */}
+                    {/* Live Preview (දැන් QR එකත් එක්කම පේනවා) */}
                     <div className="scale-90 origin-top -mb-10 pointer-events-none">
-                      <CardPreview details={student} generatedQr={null} isGenerated={false} />
+                      <CardPreview details={student} generatedQr={student.qrCode} isGenerated={true} isBulk={true} />
                     </div>
                     <div className="absolute bottom-2 left-2 right-2 bg-black/60 backdrop-blur-sm text-xs text-white p-1 rounded text-center">
                       {student.name}
