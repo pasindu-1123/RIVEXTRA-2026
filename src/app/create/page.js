@@ -729,6 +729,12 @@ export default function CreatePage() {
             -webkit-print-color-adjust: exact;
             print-color-adjust: exact;
           }
+          /* Print sheet eke animations okkoma off (QR eka opacity 0 wela print wenne naha) */
+          .print-sheet,
+          .print-sheet * {
+            animation: none !important;
+            transition: none !important;
+          }
         }
       `}</style>
     </main>
@@ -736,7 +742,7 @@ export default function CreatePage() {
     {/* ===== A4 PRINT SHEET: screen eke penenne naha, Print karaddi witharai ===== */}
     {isGenerated && generatedQr && (
       <div
-        className="hidden bg-white print:block"
+        className="print-sheet hidden bg-white print:block"
         style={{
           width: "210mm",
           height: "297mm",
