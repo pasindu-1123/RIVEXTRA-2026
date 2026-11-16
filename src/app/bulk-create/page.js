@@ -118,7 +118,7 @@ export default function BulkCreatePage() {
           </button>
         </div>
 
-        {/* A4 Print Area */}
+                {/* A4 Print Area */}
         <div className="mx-auto bg-white shadow-2xl print:shadow-none" 
              style={{ width: '210mm', minHeight: '297mm' }}>
           
