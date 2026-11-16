@@ -195,15 +195,15 @@ export default function CardPreview({
           {details.name || "STUDENT NAME"}
         </h1>
 
-        <div className={`flex w-full items-center justify-center ${isPrintOnly ? "mt-1 gap-1" : "mt-3 gap-3"}`}>
-                    <div className="h-px flex-1 bg-[#0a1b4d]/30" />
-                    <p className={`font-bold text-gray-800 ${isPrintOnly ? "text-[10px]" : "text-[19px]"}`}>
-                      Grade: {details.grade || "—"}
-                    </p>
-                    <div className="h-px flex-1 bg-[#0a1b4d]/30" />
-                  </div>
+        <div className="mt-3 flex w-full items-center justify-center gap-3">
+          <div className="h-px flex-1 bg-[#0a1b4d]/30" />
+          <p className="text-[17px] font-bold text-gray-800">
+            Grade: {details.grade || "—"}
+          </p>
+          <div className="h-px flex-1 bg-[#0a1b4d]/30" />
+        </div>
 
-        <p className="mt-3 text-[14px] font-semibold leading-snug text-gray-700">
+        <p className="mt-3 text-[15px] font-bold leading-snug text-gray-800">
           {details.school || "School Name"}
         </p>
       </div>
