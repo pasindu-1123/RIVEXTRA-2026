@@ -73,13 +73,14 @@ export default function CardPreview({
   };
 
   // 👇 ප්‍රින්ට් වෙද්දී කාඩ් එකේ හරියටම ප්‍රමාණය (65mm x 95mm)
+  // 👇 ප්‍රින්ට් වෙද්දී කාඩ් එකේ හරියටම ප්‍රමාණය
   const printContainerStyle = isPrintOnly
     ? { width: "65mm", height: "95mm", minWidth: "65mm", minHeight: "95mm", margin: "0", padding: "0" }
     : {};
 
   return (
     <div className={isPrintOnly ? "w-[65mm] h-[95mm] m-0 p-0" : "flex w-full flex-col items-center gap-6 sm:gap-8"}>
-      <div ref={wrapRef} className={isPrintOnly ? "w-full h-full m-0 p-0" : "w-full max-w-[400px]"}>
+      <div ref={wrapRef} className={isPrintOnly ? "w-full h-full m-0 p-0 flex justify-center items-center" : "w-full max-w-[400px]"}>
         
         <div
           className={isPrintOnly ? "h-full w-full m-0 p-0" : "card-float animate-float-slow"}
@@ -128,29 +129,29 @@ export default function CardPreview({
                   className="pointer-events-none absolute inset-0 z-0 h-full w-full select-none object-cover"
                 />
 
-                {/* HEADER - මම මේකේ ප්‍රමාණ ඔයාගේ ලොකු කාඩ් එකේ විදියටම තියලා තියෙනවා */}
-                <div className={`relative z-10 flex w-full items-center justify-between ${isPrintOnly ? "px-4 pt-4" : "px-8 pt-10"}`}>
+                {/* HEADER */}
+                <div className={`relative z-10 flex w-full items-center justify-between ${isPrintOnly ? "px-3 pt-3" : "px-8 pt-10"}`}>
                   <div className="flex w-[17%] items-center justify-center">
-                    <img src="/assets/school-logo.png" alt="School Logo" className={`w-auto object-contain ${isPrintOnly ? "h-[40px]" : "h-[68px]"}`} crossOrigin="anonymous" />
+                    <img src="/assets/school-logo.png" alt="School Logo" className={`w-auto object-contain ${isPrintOnly ? "h-[32px]" : "h-[68px]"}`} crossOrigin="anonymous" />
                   </div>
-                  <div className={`bg-[#0a1b4d]/30 ${isPrintOnly ? "h-[45px] w-px" : "h-[78px] w-px"}`} />
+                  <div className={`bg-[#0a1b4d]/30 ${isPrintOnly ? "h-[35px] w-px" : "h-[78px] w-px"}`} />
                   <div className="flex w-[22%] items-center justify-center">
-                    <img src="/assets/technology-logo.png" alt="Technology Faculty Logo" className={`w-auto object-contain ${isPrintOnly ? "h-[40px]" : "h-[68px]"}`} crossOrigin="anonymous" />
+                    <img src="/assets/technology-logo.png" alt="Technology Faculty Logo" className={`w-auto object-contain ${isPrintOnly ? "h-[32px]" : "h-[68px]"}`} crossOrigin="anonymous" />
                   </div>
-                  <div className={`bg-[#0a1b4d]/30 ${isPrintOnly ? "h-[45px] w-px" : "h-[78px] w-px"}`} />
+                  <div className={`bg-[#0a1b4d]/30 ${isPrintOnly ? "h-[35px] w-px" : "h-[78px] w-px"}`} />
                   <div className="flex flex-1 items-center justify-center overflow-visible pl-1">
                     <img src="/assets/rivextra-logo.png" alt="RIVEXTRA '26" className={`h-auto w-full origin-center scale-[1.1] object-contain`} crossOrigin="anonymous" />
                   </div>
                 </div>
 
-                {/* QR */}
-                <div className="relative z-10 flex flex-1 items-center justify-center">
+                {/* QR (පොඩ්ඩක් ලොකු කළා) */}
+                <div className="relative z-10 flex flex-1 items-center justify-center mt-1">
                   {isGenerated && generatedQr ? (
                     <div className={`animate-fade-in rounded-lg bg-white shadow-sm ${isPrintOnly ? "p-1" : "p-1.5"}`}>
-                      <img src={generatedQr} alt="QR Code" className={`${isPrintOnly ? "h-[110px] w-[110px]" : "h-[208px] w-[208px]"}`} />
+                      <img src={generatedQr} alt="QR Code" className={`${isPrintOnly ? "h-[140px] w-[140px]" : "h-[208px] w-[208px]"}`} />
                     </div>
                   ) : (
-                    <div className={`flex flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-[#0a1b4d]/30 bg-white/60 backdrop-blur-sm ${isPrintOnly ? "h-[110px] w-[110px]" : "h-[216px] w-[216px]"}`}>
+                    <div className={`flex flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-[#0a1b4d]/30 bg-white/60 backdrop-blur-sm ${isPrintOnly ? "h-[140px] w-[140px]" : "h-[216px] w-[216px]"}`}>
                       <QrCode className={`animate-pulse text-[#0a1b4d]/40 ${isPrintOnly ? "h-6 w-6" : "h-12 w-12"}`} />
                       <span className={`px-2 text-center font-semibold text-[#0a1b4d]/50 ${isPrintOnly ? "text-[8px]" : "text-sm"}`}>
                         Generate QR<br />to view
@@ -159,19 +160,19 @@ export default function CardPreview({
                   )}
                 </div>
 
-                {/* DETAILS */}
-                <div className={`relative z-10 flex w-full flex-col items-center text-center ${isPrintOnly ? "px-4 pb-6" : "px-8 pb-[88px]"}`}>
-                  <h1 className={`max-w-full break-words font-extrabold uppercase tracking-wide text-[#0a1b4d] ${isPrintOnly ? "text-[12px] mt-1" : "text-[19px]"}`}>
+                {/* DETAILS (උඩට ගත්තා) */}
+                <div className={`relative z-10 flex w-full flex-col items-center text-center mt-2 ${isPrintOnly ? "px-2 pb-2" : "px-8 pb-[88px]"}`}>
+                  <h1 className={`max-w-full break-words font-extrabold uppercase tracking-wide text-[#0a1b4d] ${isPrintOnly ? "text-[13px] mt-0" : "text-[19px]"}`}>
                     {details.name || "STUDENT NAME"}
                   </h1>
-                  <div className={`flex w-full items-center justify-center ${isPrintOnly ? "mt-1.5 gap-1.5" : "mt-3 gap-3"}`}>
+                  <div className={`flex w-full items-center justify-center ${isPrintOnly ? "mt-1 gap-1" : "mt-3 gap-3"}`}>
                     <div className="h-px flex-1 bg-[#0a1b4d]/30" />
-                    <p className={`font-semibold text-gray-600 ${isPrintOnly ? "text-[8px]" : "text-xs"}`}>
+                    <p className={`font-semibold text-gray-600 ${isPrintOnly ? "text-[9px]" : "text-xs"}`}>
                       Grade: {details.grade || "—"}
                     </p>
                     <div className="h-px flex-1 bg-[#0a1b4d]/30" />
                   </div>
-                  <p className={`font-medium text-gray-600 ${isPrintOnly ? "mt-1.5 text-[8px]" : "mt-4 text-[11px]"}`}>
+                  <p className={`font-medium text-gray-600 ${isPrintOnly ? "mt-1 text-[9px]" : "mt-4 text-[11px]"}`}>
                     {details.school || "School Name"}
                   </p>
                 </div>
