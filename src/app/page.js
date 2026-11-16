@@ -484,15 +484,7 @@ export default function Home() {
         </Reveal>
       </section>
 
-      {/* ADVERTISEMENT PLACEHOLDER */}
-      <section className="px-4 py-8 sm:px-6 sm:py-10 lg:px-10">
-        <div className="mx-auto flex min-h-28 max-w-5xl flex-col items-center justify-center rounded-xl border border-dashed border-white/10 bg-white/[0.02] p-6 text-center">
-          <p className="text-[10px] tracking-[0.25em] text-gray-600">
-            ADVERTISEMENT
-          </p>
-          <p className="mt-2 text-xs text-gray-500">Advertisement space</p>
-        </div>
-      </section>
+
 
       {/* FOOTER */}
       <footer className="mt-10 border-t border-white/10 px-4 py-8 sm:mt-16 sm:px-6 sm:py-10 lg:px-10">
