@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { ArrowLeft, UserPlus, Trash2, Printer, Loader2, Sparkles, AlertTriangle } from "lucide-react";
 import CardPreview from "../create/CardPreview";
 
@@ -11,7 +10,6 @@ const initialDetails = {
 };
 
 export default function BulkCreatePage() {
-  const router = useRouter();
   const [details, setDetails] = useState(initialDetails);
   const [addedStudents, setAddedStudents] = useState([]);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -120,11 +118,10 @@ export default function BulkCreatePage() {
           </button>
         </div>
 
-               {/* A4 Print Area */}
+        {/* A4 Print Area */}
         <div className="mx-auto bg-white shadow-2xl print:shadow-none" 
              style={{ width: '210mm', minHeight: '297mm' }}>
           
-          {/* මෙතන 'justify-items-center' දාලා තියෙනවා මැදට එන්න */}
           <div className="grid grid-cols-3 p-0 m-0 gap-0 justify-items-center">
             {addedStudents.map((student, idx) => (
               <div key={idx} className="w-[65mm] h-[95mm] m-0 p-0">
@@ -138,10 +135,6 @@ export default function BulkCreatePage() {
               </div>
             ))}
           </div>
-        </div>
-
-
-              
         </div>
       </main>
     );
@@ -232,7 +225,6 @@ export default function BulkCreatePage() {
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold">Added Students ({addedStudents.length})</h2>
               
-              {/* 👇 මෙතන තමයි වෙනස්කම - දැන් එක සිසුවෙක් ආවම බටන් එක එනවා */}
               {addedStudents.length > 0 && (
                 <button onClick={() => setShowPrintView(true)} className="primary-button px-6 py-2 rounded-lg font-bold flex items-center gap-2 text-sm animate-fade-in shadow-lg shadow-blue-500/20">
                   <Sparkles className="h-4 w-4"/> Generate A4 Sheet
@@ -268,7 +260,6 @@ export default function BulkCreatePage() {
         </div>
       </div>
 
-      {/* Print Styles */}
       <style jsx global>{`
         @media print {
           @page {
