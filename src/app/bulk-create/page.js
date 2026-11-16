@@ -3,19 +3,18 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, UserPlus, Trash2, Printer, Loader2, Sparkles, CheckCircle2, AlertTriangle } from "lucide-react";
+import { ArrowLeft, UserPlus, Trash2, Printer, Loader2, Sparkles, AlertTriangle } from "lucide-react";
 import CardPreview from "../create/CardPreview";
 
 const initialDetails = {
-  name: "", grade: "", height: "", weight: "", school: "", birthday: "", age: "", bmi: "", gender: "Male" // 👈 gender එක default විදියට දැම්මා
+  name: "", grade: "", height: "", weight: "", school: "", birthday: "", age: "", bmi: "", gender: "Male"
 };
 
 export default function BulkCreatePage() {
   const router = useRouter();
   const [details, setDetails] = useState(initialDetails);
-  const [addedStudents, setAddedStudents] = useState([]); // Add කරපු සිසුන්
-  const [isGenerating, setIsGenerating] = useState(false); // Add කරනකොට loading
-  const [isPrintReady, setIsPrintReady] = useState(false); // Final Generate එක
+  const [addedStudents, setAddedStudents] = useState([]);
+  const [isGenerating, setIsGenerating] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [showPrintView, setShowPrintView] = useState(false); 
 
@@ -53,7 +52,7 @@ export default function BulkCreatePage() {
     if (errorMsg) setErrorMsg("");
   }
 
-  // සිසුවෙක් එකතු කිරීම (මෙතනදීම API දෙකටම කෝල් වෙනවා)
+  // සිසුවෙක් එකතු කිරීම
   const handleAddStudent = async () => {
     if (!details.name) {
       setErrorMsg("කරුණාකර සිසුවාගේ නම ඇතුළත් කරන්න.");
@@ -72,7 +71,6 @@ export default function BulkCreatePage() {
     setErrorMsg("");
 
     try {
-      // 1. Student Save කරන්න
       const res = await fetch("/api/students", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -85,7 +83,6 @@ export default function BulkCreatePage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "දත්ත සුරැකීමේ දෝෂයක්.");
 
-      // 2. QR එක ගන්න
       const qrRes = await fetch("/api/create-qr", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -94,9 +91,8 @@ export default function BulkCreatePage() {
       const qrData = await qrRes.json();
       if (!qrRes.ok) throw new Error(qrData.error || "QR සෑදීමේ දෝෂයක්.");
 
-      // 3. සාර්ථක නම් List එකට එකතු කරන්න
       setAddedStudents([...addedStudents, { ...details, qrCode: qrData.qrCode }]);
-      setDetails(initialDetails); // ඊළඟ සිසුවාට ෆෝම් එක ක්ලියර් කරනවා
+      setDetails(initialDetails);
       
     } catch (error) {
       setErrorMsg(error.message);
@@ -105,7 +101,6 @@ export default function BulkCreatePage() {
     }
   };
 
-  // සිසුවෙක් අයින් කිරීම
   const handleRemoveStudent = (index) => {
     setAddedStudents(addedStudents.filter((_, i) => i !== index));
   };
@@ -115,39 +110,45 @@ export default function BulkCreatePage() {
   // ================= PRINT VIEW (A4 Sheet) =================
   if (showPrintView) {
     return (
-      <main className="min-h-screen bg-gray-100 p-4 md:p-8">
-        <div className="max-w-[210mm] mx-auto mb-8 flex justify-between items-center print:hidden">
-          <button onClick={() => setShowPrintView(false)} className="text-gray-600 hover:text-black flex items-center gap-2 font-semibold">
+      <main className="min-h-screen bg-gray-200 print:bg-white">
+        {/* Print කරද්දී මේක පේන්නේ නෑ */}
+        <div className="w-full bg-white shadow-sm p-4 mb-8 flex justify-between items-center print:hidden">
+          <button onClick={() => setShowPrintView(false)} className="text-gray-600 hover:text-black flex items-center gap-2 font-semibold px-4 py-2 rounded-lg hover:bg-gray-100 transition">
             <ArrowLeft className="h-5 w-5" /> Edit Students
           </button>
-          <button onClick={() => window.print()} className="bg-blue-600 text-white px-6 py-3 rounded-lg flex items-center gap-2 font-bold hover:bg-blue-700 shadow-lg">
+          <button onClick={() => window.print()} className="bg-blue-600 text-white px-6 py-3 rounded-lg flex items-center gap-2 font-bold hover:bg-blue-700 shadow-lg transition">
             <Printer className="h-5 w-5" /> Print A4 Sheet
           </button>
         </div>
 
-        {/* A4 Print Area - 3 Columns (එක පේළියකට 3ක්) */}
-        <div className="mx-auto bg-white w-[210mm] min-h-[297mm] p-[10mm] grid grid-cols-3 gap-x-2 gap-y-4 print:shadow-none shadow-2xl print:w-full print:p-0 print:gap-4">
-          {addedStudents.map((student, idx) => (
-            <div key={idx} className="flex justify-center items-start">
-              <CardPreview 
-                details={student} 
-                generatedQr={student.qrCode} 
-                isGenerated={true} 
-                isBulk={true} 
-              />
-            </div>
-          ))}
+        {/* A4 Print Area */}
+        <div className="mx-auto bg-white shadow-2xl print:shadow-none" 
+             style={{ width: '210mm', minHeight: '297mm' }}>
+          
+          {/* මෙතන තමයි වෙනස. p-[5mm] දුන්නා අද්දරින් පොඩි ඉඩක් තියෙන්න, gap-0 දුන්නා කාඩ් අතරේ ඉඩ නැතුව තියෙන්න */}
+          <div className="grid grid-cols-3 p-[5mm] gap-0">
+            {addedStudents.map((student, idx) => (
+              <div key={idx} className="flex justify-center items-start w-full">
+                <CardPreview 
+                  details={student} 
+                  generatedQr={student.qrCode} 
+                  isGenerated={true} 
+                  isPrintOnly={true} // 👈 මෙතන තමයි වැදගත්ම දේ
+                  showActions={false}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </main>
     );
   }
 
-  // ================= FORM VIEW (Add Students) =================
+  // ================= FORM VIEW =================
   return (
     <main className="min-h-screen bg-[#05080f] text-white p-6 md:p-12">
       <div className="max-w-6xl mx-auto">
         
-        {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-3xl font-bold">Bulk Card Generator</h1>
@@ -187,8 +188,6 @@ export default function BulkCreatePage() {
                     <label className="text-xs text-gray-400 mb-1 block">Grade</label>
                     <input type="text" name="grade" value={details.grade} onChange={handleChange} className="w-full bg-[#05080f] border border-white/10 rounded-lg px-4 py-3 text-sm focus:border-blue-500 outline-none" placeholder="e.g. 10" />
                   </div>
-                  
-                  {/* 👇 Gender එක එකතු කළා (Database එකේ අවශ්‍ය නිසා) */}
                   <div>
                     <label className="text-xs text-gray-400 mb-1 block">Gender</label>
                     <select name="gender" value={details.gender} onChange={handleChange} className="w-full bg-[#05080f] border border-white/10 rounded-lg px-4 py-3 text-sm focus:border-blue-500 outline-none text-white">
@@ -196,7 +195,6 @@ export default function BulkCreatePage() {
                       <option value="Female">Female</option>
                     </select>
                   </div>
-
                   <div>
                     <label className="text-xs text-gray-400 mb-1 block">Birthday</label>
                     <input type="date" name="birthday" value={details.birthday} onChange={handleChange} className="w-full bg-[#05080f] border border-white/10 rounded-lg px-4 py-3 text-sm focus:border-blue-500 outline-none" style={{ colorScheme: "dark" }} />
@@ -230,8 +228,6 @@ export default function BulkCreatePage() {
           <div>
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold">Added Students ({addedStudents.length})</h2>
-              
-              {/* 4 වෙනි සිසුවා ආවම මේ බටන් එක එනවා */}
               {addedStudents.length >= 4 && (
                 <button onClick={() => setShowPrintView(true)} className="primary-button px-6 py-2 rounded-lg font-bold flex items-center gap-2 text-sm animate-fade-in shadow-lg shadow-blue-500/20">
                   <Sparkles className="h-4 w-4"/> Generate A4 Sheet
@@ -249,12 +245,10 @@ export default function BulkCreatePage() {
               <div className="grid grid-cols-2 gap-4">
                 {addedStudents.map((student, idx) => (
                   <div key={idx} className="relative group bg-[#0c1424] rounded-xl overflow-hidden border border-white/10 p-2">
-                    {/* අයින් කරන බටන් එක */}
                     <button onClick={() => handleRemoveStudent(idx)} className="absolute top-2 right-2 z-20 bg-red-500/80 p-1.5 rounded-full text-white opacity-0 group-hover:opacity-100 transition">
                       <Trash2 className="h-4 w-4" />
                     </button>
                     
-                    {/* Live Preview (දැන් QR එකත් එක්කම පේනවා) */}
                     <div className="scale-90 origin-top -mb-10 pointer-events-none">
                       <CardPreview details={student} generatedQr={student.qrCode} isGenerated={true} isBulk={true} />
                     </div>
@@ -269,13 +263,24 @@ export default function BulkCreatePage() {
         </div>
       </div>
 
-      {/* Print Styles */}
+      {/* ප්‍රින්ට් කරද්දී කාඩ් එක හරියටම A4 එකට ගැලපෙන්න මේ CSS එක අවශ්‍යයි */}
       <style jsx global>{`
         @media print {
-          body { background: white; }
-          .print\\:hidden { display: none !important; }
-          main { padding: 0 !important; background: white !important; }
-          .print-card { box-shadow: none !important; border: 1px solid #eee !important; }
+          @page {
+            size: A4 portrait;
+            margin: 0;
+          }
+          body {
+            margin: 0;
+            padding: 0;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+          }
+          /* මේකෙන් ප්‍රින්ට් වෙද්දී හරියටම කාඩ් එක විතරක් පේන්න හදනවා */
+          .print-card {
+            page-break-inside: avoid;
+            break-inside: avoid;
+          }
         }
       `}</style>
     </main>
