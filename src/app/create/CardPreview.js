@@ -72,7 +72,6 @@ export default function CardPreview({
     }
   };
 
-  // 👇 ප්‍රින්ට් වෙද්දී කාඩ් එකේ හරියටම ප්‍රමාණය (65mm x 95mm)
   // 👇 ප්‍රින්ට් වෙද්දී කාඩ් එකේ හරියටම ප්‍රමාණය
   const printContainerStyle = isPrintOnly
     ? { width: "65mm", height: "95mm", minWidth: "65mm", minHeight: "95mm", margin: "0", padding: "0" }
@@ -144,7 +143,7 @@ export default function CardPreview({
                   </div>
                 </div>
 
-                {/* QR (පොඩ්ඩක් ලොකු කළා) */}
+                {/* QR */}
                 <div className="relative z-10 flex flex-1 items-center justify-center mt-1">
                   {isGenerated && generatedQr ? (
                     <div className={`animate-fade-in rounded-lg bg-white shadow-sm ${isPrintOnly ? "p-1" : "p-1.5"}`}>
@@ -160,7 +159,7 @@ export default function CardPreview({
                   )}
                 </div>
 
-                {/* DETAILS (උඩට ගත්තා) */}
+                {/* DETAILS */}
                 <div className={`relative z-10 flex w-full flex-col items-center text-center mt-2 ${isPrintOnly ? "px-2 pb-2" : "px-8 pb-[88px]"}`}>
                   <h1 className={`max-w-full break-words font-extrabold uppercase tracking-wide text-[#0a1b4d] ${isPrintOnly ? "text-[13px] mt-0" : "text-[19px]"}`}>
                     {details.name || "STUDENT NAME"}
