@@ -126,7 +126,7 @@ export default function BulkCreatePage() {
              style={{ width: '210mm', minHeight: '297mm' }}>
           
           {/* මෙතන තමයි වෙනස. p-[5mm] දුන්නා අද්දරින් පොඩි ඉඩක් තියෙන්න, gap-0 දුන්නා කාඩ් අතරේ ඉඩ නැතුව තියෙන්න */}
-          <div className="grid grid-cols-3 p-[5mm] gap-0">
+          <div className="grid grid-cols-3 p-[0mm] gap-0">
             {addedStudents.map((student, idx) => (
               <div key={idx} className="flex justify-center items-start w-full">
                 <CardPreview 
