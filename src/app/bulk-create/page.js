@@ -126,18 +126,18 @@ export default function BulkCreatePage() {
           
           {/* මෙතන p-[0mm] දුන්නා අද්දරින් ඉඩ නැතුව තියෙන්න, gap-0 දුන්නා කාඩ් අතරේ ඉඩ නැතුව තියෙන්න */}
           <div className="grid grid-cols-3 p-[0mm] gap-0">
-            {addedStudents.map((student, idx) => (
-              <div key={idx} className="flex justify-center items-start w-full m-0 p-0">
-                <CardPreview 
-                  details={student} 
-                  generatedQr={student.qrCode} 
-                  isGenerated={true} 
-                  isPrintOnly={true}
-                  showActions={false}
-                />
-              </div>
-            ))}
-          </div>
+  {addedStudents.map((student, idx) => (
+    <div key={idx} className="flex justify-center items-start w-[65mm] h-[95mm] m-0 p-0">
+      <CardPreview 
+        details={student} 
+        generatedQr={student.qrCode} 
+        isGenerated={true} 
+        isPrintOnly={true}
+        showActions={false}
+      />
+    </div>
+  ))}
+</div>
         </div>
       </main>
     );
