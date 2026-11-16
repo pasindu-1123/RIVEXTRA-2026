@@ -132,18 +132,18 @@ export default function CardPreview({
         className="relative z-10 flex w-full items-center justify-between px-8"
         style={{ paddingTop: headerPt }}
       >
-        <div className="flex w-[17%] items-center justify-center">
+        <div className="flex w-[21%] items-center justify-center">
           <img
             src="/assets/school-logo.png"
             alt="School Logo"
-            className="h-[68px] w-auto object-contain"
+            className="h-[90px] w-auto object-contain"
             crossOrigin="anonymous"
           />
         </div>
 
-        <div className="h-[78px] w-px bg-[#0a1b4d]/30" />
+        <div className="h-[94px] w-px bg-[#0a1b4d]/30" />
 
-        <div className="flex w-[22%] items-center justify-center">
+        <div className="flex w-[20%] items-center justify-center">
           <img
             src="/assets/technology-logo.png"
             alt="Technology Faculty Logo"
@@ -152,7 +152,7 @@ export default function CardPreview({
           />
         </div>
 
-        <div className="h-[78px] w-px bg-[#0a1b4d]/30" />
+        <div className="h-[94px] w-px bg-[#0a1b4d]/30" />
 
         <div className="flex flex-1 items-center justify-center overflow-visible pl-1">
           <img
@@ -203,7 +203,7 @@ export default function CardPreview({
           <div className="h-px flex-1 bg-[#0a1b4d]/30" />
         </div>
 
-        <p className="mt-4 text-[11px] font-medium text-gray-600">
+        <p className="mt-3 text-[14px] font-semibold leading-snug text-gray-700">
           {details.school || "School Name"}
         </p>
       </div>
@@ -216,10 +216,11 @@ export default function CardPreview({
       <div
         className="relative overflow-hidden"
         style={{
+          display: "block",
           width: `${PRINT_W_MM}mm`,
           height: `${PRINT_H_MM}mm`,
-          outline: "0.2mm solid #cbd5e1", // cut guide
-          outlineOffset: "-0.2mm",
+          margin: 0,
+          padding: 0,
         }}
       >
         <div
