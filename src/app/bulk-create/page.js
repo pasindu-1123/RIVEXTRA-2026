@@ -167,7 +167,7 @@ export default function BulkCreatePage() {
               display: "grid",
               gridTemplateColumns: "repeat(3, 65mm)",
               justifyContent: "center",
-              gap: 0,
+              gap: "2mm", // cards athara gap (mm). Wenas karanna puluwan
             }}
           >
             {addedStudents.map((student, idx) => (
